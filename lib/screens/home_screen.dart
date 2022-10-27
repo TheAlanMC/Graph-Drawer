@@ -2,8 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/widgets.dart';
 
-enum Action { Add, Edit, Delete, Distance }
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -13,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Node> nodes = [];
+  List<Connection> connections = [];
   String name = '';
   double radius = 40;
 
@@ -29,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           ...nodes,
+          ...connections,
           if (state == 1)
             CustomAlertDialog(
                 title: 'Agregar Nodo',
