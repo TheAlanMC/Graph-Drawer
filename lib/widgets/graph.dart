@@ -5,8 +5,9 @@ class Graph extends CustomPainter {
   final double posX;
   final double posY;
   final double radius;
+  final String text;
 
-  Graph({required this.color, required this.posX, required this.posY, required this.radius});
+  Graph({required this.color, required this.posX, required this.posY, required this.radius, required this.text});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -24,11 +25,11 @@ class Graph extends CustomPainter {
       ..close();
 
     final textPainter = TextPainter(
-      text: const TextSpan(
-        text: 'A',
+      text: TextSpan(
+        text: text,
         style: TextStyle(
           color: Colors.white,
-          fontSize: 30,
+          fontSize: radius - 10,
         ),
       ),
       textDirection: TextDirection.ltr,
@@ -36,7 +37,7 @@ class Graph extends CustomPainter {
     canvas.drawPath(path, paint);
     canvas.drawPath(path, border);
     textPainter.layout();
-    textPainter.paint(canvas, Offset(posX - 10, posY - 15));
+    textPainter.paint(canvas, Offset(posX - radius / 4, posY - radius / 2));
   }
 
   @override

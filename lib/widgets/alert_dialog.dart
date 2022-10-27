@@ -33,7 +33,7 @@ class CustomAlertDialog extends StatelessWidget {
         ),
         TextButton(
           child: const Text("Continuar"),
-          onPressed: () => confirmAction(),
+          onPressed: () => confirmAction(controller.text),
         ),
       ],
     );

@@ -5,15 +5,15 @@ class Node extends StatelessWidget {
   final Color color;
   final double x;
   final double y;
+  final double radius;
+  final String text;
 
-  const Node({super.key, required this.color, required this.x, required this.y});
+  const Node({super.key, required this.color, required this.x, required this.y, required this.radius, required this.text});
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: CustomPaint(
-        painter: Graph(color: color, posX: x, posY: y, radius: 50),
-      ),
+    return CustomPaint(
+      painter: Graph(color: color, posX: x, posY: y, radius: radius, text: text),
     );
   }
 }

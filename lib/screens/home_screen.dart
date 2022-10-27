@@ -13,8 +13,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Node> nodes = [];
-  List<CustomAlertDialog> dialogs = [];
-  List<GestureDetector> gestures = [];
+  String name = '';
+  double radius = 40;
+
   Random random = Random();
   int state = 0;
   @override
@@ -37,8 +38,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     state = 0;
                   });
                 },
-                confirmAction: () {
+                confirmAction: (value) {
                   setState(() {
+                    name = value;
                     state = 2;
                   });
                 }),
@@ -52,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       x: details.localPosition.dx,
                       y: details.localPosition.dy,
                       color: Colors.indigo,
+                      radius: radius,
+                      text: name,
                     ));
                   },
                 );
@@ -72,6 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
             case 2:
               break;
             case 3:
+              setState(() {
+                if (nodes.isNotEmpty) {
+                  nodes.removeLast();
+                }
+              });
               break;
           }
         },
