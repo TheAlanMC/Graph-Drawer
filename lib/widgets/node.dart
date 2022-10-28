@@ -16,4 +16,8 @@ class Node extends StatelessWidget {
       painter: Graph(color: color, posX: x, posY: y, radius: radius, text: text),
     );
   }
+
+  bool isInside(double dx, double dy) {
+    return (dx - x).abs() < radius && (dy - y).abs() < radius;
+  }
 }

@@ -58,15 +58,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: radius,
                       text: name,
                     ));
-                    if (nodes.length > 1) {
-                      for (int i = 0; i < nodes.length - 1; i++) {
-                        connections.add(Connection(
-                          x1: nodes[i].x,
-                          y1: nodes[i].y,
-                          x2: nodes[nodes.length - 1].x,
-                          y2: nodes[nodes.length - 1].y,
-                          text: '1',
-                        ));
+                    updateConnections();
+                  },
+                );
+              },
+            ),
+          if (state == 5)
+            GestureDetector(
+              onTapDown: (details) {
+                setState(
+                  () {
+                    for (int i = 0; i < nodes.length; i++) {
+                      if (nodes[i].isInside(details.localPosition.dx, details.localPosition.dy)) {
+                        nodes.removeAt(i);
+                        state = 0;
+                        updateConnections();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Nodo eliminado.'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                        break;
                       }
                     }
                   },
@@ -84,19 +97,45 @@ class _HomeScreenState extends State<HomeScreen> {
               });
               break;
             case 1:
+              setState(() {
+                state = 3;
+              });
               break;
             case 2:
+              setState(() {
+                state = 4;
+              });
               break;
             case 3:
+              state = 5;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Presione en un nodo para eliminarlo.'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
               setState(() {
-                if (nodes.isNotEmpty) {
-                  nodes.removeLast();
-                }
+                state = 5;
               });
               break;
           }
         },
       ),
     );
+  }
+
+  void updateConnections() {
+    connections.clear();
+    for (int i = 0; i < nodes.length - 1; i++) {
+      for (int j = i + 1; j < nodes.length; j++) {
+        connections.add(Connection(
+          x1: nodes[i].x,
+          y1: nodes[i].y,
+          x2: nodes[j].x,
+          y2: nodes[j].y,
+          text: '1',
+        ));
+      }
+    }
   }
 }

@@ -29,10 +29,10 @@ class CustomAlertDialogEditNodeName extends StatelessWidget {
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Por favor ingrese una letra o un número';
+              return 'Por favor ingrese una letra o un número.';
             }
             if (value.length > 1) {
-              return 'Por favor ingrese una letra o un número';
+              return 'Por favor ingrese una letra o un número.';
             }
             return null;
           },
@@ -51,14 +51,14 @@ class CustomAlertDialogEditNodeName extends StatelessWidget {
                 confirmAction(controller.text.toUpperCase());
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Presione en la pantalla para agregar el nodo'),
+                    content: Text('Presione en la pantalla para agregar el nodo.'),
                     duration: Duration(seconds: 2),
                   ),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Por favor ingrese una letra o un número'),
+                    content: Text('Por favor ingrese una letra o un número.'),
                     duration: Duration(seconds: 2),
                   ),
                 );
