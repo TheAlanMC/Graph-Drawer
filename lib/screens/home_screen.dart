@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/widgets.dart';
 import 'package:graph_drawer/models/models.dart';
@@ -68,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 content: 'Nombre del Nodo',
                 cancelAction: () {
                   setState(() {
-                    state = 1;
+                    state = 0;
                     deleteConnections(nodes.length - 1);
                     nodes.removeLast();
                   });
