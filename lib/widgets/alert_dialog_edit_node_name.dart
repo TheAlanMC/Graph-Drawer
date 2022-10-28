@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class CustomAlertDialog extends StatelessWidget {
+class CustomAlertDialogEditNodeName extends StatelessWidget {
   final String title;
   final String content;
   final Function cancelAction;
   final Function confirmAction;
 
-  const CustomAlertDialog({
+  const CustomAlertDialogEditNodeName({
     Key? key,
     required this.title,
     required this.content,
@@ -29,10 +29,10 @@ class CustomAlertDialog extends StatelessWidget {
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Por favor ingrese una letra';
+              return 'Por favor ingrese una letra o un número';
             }
             if (value.length > 1) {
-              return 'Por favor ingrese una letra';
+              return 'Por favor ingrese una letra o un número';
             }
             return null;
           },
@@ -47,19 +47,18 @@ class CustomAlertDialog extends StatelessWidget {
         TextButton(
             child: const Text("Continuar"),
             onPressed: () {
-              if (controller.text.length == 1) {
+              if (controller.text.length == 1 && controller.text.isNotEmpty) {
                 confirmAction(controller.text.toUpperCase());
-                //Snackbar
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Presione en el espacio para agregar el nodo'),
+                    content: Text('Presione en la pantalla para agregar el nodo'),
                     duration: Duration(seconds: 2),
                   ),
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text('Por favor ingrese una letra'),
+                    content: Text('Por favor ingrese una letra o un número'),
                     duration: Duration(seconds: 2),
                   ),
                 );

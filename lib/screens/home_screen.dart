@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ...connections,
           ...nodes,
           if (state == 1)
-            CustomAlertDialog(
+            CustomAlertDialogEditNodeName(
                 title: 'Agregar Nodo',
                 content: 'Nombre del Nodo',
                 cancelAction: () {
