@@ -16,6 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
   String name = '';
   double radius = 40;
 
+  bool allowDrag = false;
+  int dragNode = -1;
+
   Random random = Random();
   int state = 0;
   @override
@@ -47,13 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 }),
           if (state == 2)
             GestureDetector(
-              onTapDown: (details) {
+              onTapDown: (position) {
                 setState(
                   () {
                     state = 0;
                     nodes.add(Node(
-                      x: details.localPosition.dx,
-                      y: details.localPosition.dy,
+                      x: position.localPosition.dx,
+                      y: position.localPosition.dy,
                       color: Colors.indigo,
                       radius: radius,
                       text: name,
@@ -63,13 +66,49 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+          if (state == 4)
+            GestureDetector(
+              onPanDown: (position) {
+                setState(() {
+                  for (int i = 0; i < nodes.length; i++) {
+                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                      dragNode = i;
+                      allowDrag = true;
+                      break;
+                    }
+                  }
+                });
+              },
+              onPanUpdate: (position) {
+                setState(() {
+                  if (allowDrag) {
+                    Node tempNode = nodes[dragNode].copyWith(x: position.localPosition.dx, y: position.localPosition.dy);
+                    nodes[dragNode] = tempNode;
+                    updateConnections();
+                  }
+                });
+              },
+              onPanEnd: (position) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Nodo movido.'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+                setState(() {
+                  allowDrag = false;
+                  dragNode = -1;
+                  state = 0;
+                });
+              },
+            ),
           if (state == 5)
             GestureDetector(
-              onTapDown: (details) {
+              onTapDown: (position) {
                 setState(
                   () {
                     for (int i = 0; i < nodes.length; i++) {
-                      if (nodes[i].isInside(details.localPosition.dx, details.localPosition.dy)) {
+                      if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
                         nodes.removeAt(i);
                         state = 0;
                         updateConnections();
@@ -102,6 +141,12 @@ class _HomeScreenState extends State<HomeScreen> {
               });
               break;
             case 2:
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Presione en un nodo para moverlo.'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
               setState(() {
                 state = 4;
               });
