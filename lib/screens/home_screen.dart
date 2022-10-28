@@ -187,19 +187,17 @@ class _HomeScreenState extends State<HomeScreen> {
           if (state == 6)
             GestureDetector(
               onTapDown: (position) {
-                setState(
-                  () {
-                    for (int i = 0; i < nodes.length; i++) {
-                      if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-                        nodes.removeAt(i);
-                        deleteConnections(i);
-                        state = 6;
-                        customScaffoldMessenger(context: context, text: 'Nodo eliminado.');
-                        break;
-                      }
+                setState(() {
+                  for (int i = 0; i < nodes.length; i++) {
+                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                      nodes.removeAt(i);
+                      deleteConnections(i);
+                      state = nodes.isEmpty ? 0 : 6;
+                      customScaffoldMessenger(context: context, text: 'Nodo eliminado.');
+                      break;
                     }
-                  },
-                );
+                  }
+                });
               },
             ),
         ],
