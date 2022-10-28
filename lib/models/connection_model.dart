@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/widgets.dart';
 
-class Connection extends StatelessWidget {
+class ConnectionModel extends StatelessWidget {
   final double x1;
   final double y1;
   final double x2;
@@ -10,7 +10,7 @@ class Connection extends StatelessWidget {
   final int start;
   final int end;
 
-  const Connection(
+  const ConnectionModel(
       {super.key,
       required this.x1,
       required this.y1,
@@ -22,17 +22,17 @@ class Connection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(painter: Line(posX1: x1, posY1: y1, posX2: x2, posY2: y2, text: text));
+    return CustomPaint(painter: Connection(posX1: x1, posY1: y1, posX2: x2, posY2: y2, text: text));
   }
 
-  Connection copyWith({
+  ConnectionModel copyWith({
     double? x1,
     double? y1,
     double? x2,
     double? y2,
     String? text,
   }) {
-    return Connection(
+    return ConnectionModel(
       x1: x1 ?? this.x1,
       y1: y1 ?? this.y1,
       x2: x2 ?? this.x2,

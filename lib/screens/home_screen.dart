@@ -12,8 +12,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<GraphModel> nodes = [];
-  List<Connection> connections = [];
+  List<NodeModel> nodes = [];
+  List<ConnectionModel> connections = [];
 
   int elementIndex = -1;
 
@@ -26,13 +26,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   bool allowDrag = false;
 
+  List<String> messages = [
+    'Selecione un botón',
+    'Modo Agregar Nodo',
+    'Modo Agregar Nodo',
+    'Modo Edición Nodo o Conexión',
+    'Modo Edición Nodo o Conexión',
+    'Modo Mover Nodo',
+    'Modo Eliminar Nodo',
+  ];
+
   Random random = Random();
   int state = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Graph Drawer'),
+        title: Text(messages[state]),
         centerTitle: true,
         backgroundColor: Colors.indigo,
       ),
@@ -41,33 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
           ...connections,
           ...nodes,
           if (state == 1)
-            CustomAlertDialogNodeName(
-                title: 'Agregar Nodo',
-                content: 'Nombre del Nodo',
-                cancelAction: () {
-                  setState(() {
-                    state = 0;
-                  });
-                },
-                confirmAction: (value) {
-                  setState(() {
-                    name = value;
-                    state = 2;
-                  });
-                }),
-          if (state == 2)
             GestureDetector(
               onTapDown: (position) {
                 setState(
                   () {
-                    if (isInsideScreen(position.globalPosition.dx, position.globalPosition.dy)) {
-                      state = 0;
-                      nodes.add(GraphModel(
+                    if (isInsideScreen(position.localPosition.dx, position.localPosition.dy)) {
+                      state = 2;
+                      nodes.add(NodeModel(
                         x: position.localPosition.dx,
                         y: position.localPosition.dy,
                         color: Colors.indigo,
                         radius: radius,
-                        text: name,
+                        text: '',
                       ));
                       addConnections();
                     }
@@ -75,6 +70,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
+          if (state == 2)
+            CustomAlertDialogNodeName(
+                title: 'Agregar Nodo',
+                content: 'Nombre del Nodo',
+                cancelAction: () {
+                  setState(() {
+                    state = 0;
+                    deleteConnections(nodes.length - 1);
+                    nodes.removeLast();
+                  });
+                },
+                confirmAction: (value) {
+                  setState(() {
+                    nodes.last = nodes.last.copyWith(text: value);
+                    state = 1;
+                  });
+                }),
           if (state == 3)
             GestureDetector(
               onPanDown: (position) {
@@ -96,7 +108,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                   }
                 });
-                if (state != 4) state = 0;
+                if (state != 4) state = 3;
               },
             ),
           if (state == 4 && allowEditNode)
@@ -107,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   setState(() {
                     elementIndex = -1;
                     allowEditNode = false;
-                    state = 0;
+                    state = 3;
                   });
                 },
                 confirmAction: (value) {
@@ -115,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     nodes[elementIndex] = nodes[elementIndex].copyWith(text: value);
                     elementIndex = -1;
                     allowEditNode = false;
-                    state = 0;
+                    state = 3;
                   });
                 },
                 text: nodes[elementIndex].text),
@@ -127,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   setState(() {
                     elementIndex = -1;
                     allowEditConnection = false;
-                    state = 0;
+                    state = 3;
                   });
                 },
                 confirmAction: (value) {
@@ -135,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     connections[elementIndex] = connections[elementIndex].copyWith(text: value);
                     elementIndex = -1;
                     allowEditConnection = false;
-                    state = 0;
+                    state = 3;
                   });
                 },
                 text: connections[elementIndex].text),
@@ -168,7 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(() {
                   allowDrag = false;
                   elementIndex = -1;
-                  state = 0;
+                  state = 5;
                 });
               },
             ),
@@ -181,7 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
                         nodes.removeAt(i);
                         deleteConnections(i);
-                        state = 0;
+                        state = 6;
                         customScaffoldMessenger(context: context, text: 'Nodo eliminado.');
                         break;
                       }
@@ -196,27 +208,33 @@ class _HomeScreenState extends State<HomeScreen> {
         onTap: (value) {
           switch (value) {
             case 0:
+              customScaffoldMessenger(context: context, text: 'Presione en la pantalla para agregar el nodo.');
               setState(() {
                 state = 1;
               });
               break;
             case 1:
-              customScaffoldMessenger(context: context, text: 'Presione en el peso de la conexión o en el nodo para editar.');
+              customScaffoldMessenger(
+                  context: context,
+                  text: nodes.isNotEmpty
+                      ? 'Presione en el peso de la conexión o en el nodo para editar.'
+                      : 'Primero debe agregar nodos.');
               setState(() {
-                state = 3;
+                state = nodes.isNotEmpty ? 3 : 0;
               });
               break;
             case 2:
-              customScaffoldMessenger(context: context, text: 'Presione en un nodo para moverlo.');
+              customScaffoldMessenger(
+                  context: context, text: nodes.isNotEmpty ? 'Presione en un nodo para moverlo.' : 'Primero debe agregar nodos.');
               setState(() {
-                state = 5;
+                state = nodes.isNotEmpty ? 5 : 0;
               });
               break;
             case 3:
-              state = 6;
-              customScaffoldMessenger(context: context, text: 'Presione en un nodo para eliminarlo.');
+              customScaffoldMessenger(
+                  context: context, text: nodes.isNotEmpty ? 'Presione en un nodo para eliminarlo.' : 'Primero debe agregar nodos.');
               setState(() {
-                state = 6;
+                state = nodes.isNotEmpty ? 6 : 0;
               });
               break;
           }
@@ -227,11 +245,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void addConnections() {
     for (int i = 0; i < nodes.length - 1; i++) {
-      connections.add(Connection(
+      connections.add(ConnectionModel(
         x1: nodes[i].x,
         y1: nodes[i].y,
-        x2: nodes[nodes.length - 1].x,
-        y2: nodes[nodes.length - 1].y,
+        x2: nodes.last.x,
+        y2: nodes.last.y,
         text: '1',
         start: i,
         end: nodes.length - 1,

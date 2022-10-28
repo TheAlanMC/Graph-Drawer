@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Graph extends CustomPainter {
+class Node extends CustomPainter {
   final Color color;
   final double posX;
   final double posY;
   final double radius;
   final String text;
 
-  Graph({required this.color, required this.posX, required this.posY, required this.radius, required this.text});
+  Node({required this.color, required this.posX, required this.posY, required this.radius, required this.text});
 
   @override
   void paint(Canvas canvas, Size size) {

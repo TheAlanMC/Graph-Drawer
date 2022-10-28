@@ -56,7 +56,7 @@ class CustomAlertDialogNodeName extends StatelessWidget {
                 confirmAction(controller.text.toUpperCase());
                 customScaffoldMessenger(
                   context: context,
-                  text: text == null ? 'Presione en la pantalla para agregar el nodo.' : 'Nodo editado.',
+                  text: text == null ? 'Nodo añadido' : 'Nodo editado.',
                 );
               } else {
                 customScaffoldMessenger(context: context, text: 'Por favor ingrese una letra o un número.');

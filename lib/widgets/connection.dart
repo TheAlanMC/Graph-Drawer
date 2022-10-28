@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Line extends CustomPainter {
+class Connection extends CustomPainter {
   final double posX1;
   final double posY1;
   final double posX2;
   final double posY2;
   final String text;
 
-  Line({required this.posX1, required this.posY1, required this.posX2, required this.posY2, required this.text});
+  Connection({required this.posX1, required this.posY1, required this.posX2, required this.posY2, required this.text});
 
   @override
   void paint(Canvas canvas, Size size) {
