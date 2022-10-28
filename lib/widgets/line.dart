@@ -7,21 +7,16 @@ class Line extends CustomPainter {
   final double posY2;
   final String text;
 
-  Line(
-      {required this.posX1,
-      required this.posY1,
-      required this.posX2,
-      required this.posY2,
-      required this.text}); // <== This is the problem
+  Line({required this.posX1, required this.posY1, required this.posX2, required this.posY2, required this.text});
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.black
+      ..color = Colors.indigo
       ..style = PaintingStyle.fill;
 
     final Paint border = Paint()
-      ..color = Colors.black
+      ..color = Colors.indigo
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
@@ -34,8 +29,9 @@ class Line extends CustomPainter {
       text: TextSpan(
         text: text,
         style: const TextStyle(
-          color: Colors.white,
-          fontSize: 20,
+          color: Colors.black,
+          fontSize: 30,
+          fontWeight: FontWeight.bold,
         ),
       ),
       textDirection: TextDirection.ltr,
@@ -43,7 +39,7 @@ class Line extends CustomPainter {
     canvas.drawPath(path, paint);
     canvas.drawPath(path, border);
     textPainter.layout();
-    textPainter.paint(canvas, Offset(posX1 - 20, posY1 - 20));
+    textPainter.paint(canvas, Offset((posX1 + posX2) / 2 - 15, (posY1 + posY2) / 2 - 15));
   }
 
   @override

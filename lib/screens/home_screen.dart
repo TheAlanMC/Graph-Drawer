@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Node> nodes = [];
   List<Connection> connections = [];
+
   String name = '';
   double radius = 40;
 
@@ -27,8 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          ...nodes,
           ...connections,
+          ...nodes,
           if (state == 1)
             CustomAlertDialog(
                 title: 'Agregar Nodo',
@@ -57,6 +58,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: radius,
                       text: name,
                     ));
+                    if (nodes.length > 1) {
+                      for (int i = 0; i < nodes.length - 1; i++) {
+                        connections.add(Connection(
+                          x1: nodes[i].x,
+                          y1: nodes[i].y,
+                          x2: nodes[nodes.length - 1].x,
+                          y2: nodes[nodes.length - 1].y,
+                          text: '1',
+                        ));
+                      }
+                    }
                   },
                 );
               },
