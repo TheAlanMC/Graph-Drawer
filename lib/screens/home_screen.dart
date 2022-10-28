@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTapDown: (position) {
                 setState(
                   () {
-                    if (position.localPosition.dx - radius > 0 && position.localPosition.dy - radius > 0) {
+                    if (isInsideScreen(position.globalPosition.dx, position.globalPosition.dy)) {
                       state = 0;
                       nodes.add(GraphModel(
                         x: position.localPosition.dx,
@@ -154,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               onPanUpdate: (position) {
                 setState(() {
-                  if (allowDrag && position.localPosition.dx - radius > 0 && position.localPosition.dy - radius > 0) {
+                  if (allowDrag && isInsideScreen(position.localPosition.dx, position.localPosition.dy)) {
                     nodes[elementIndex] = nodes[elementIndex].copyWith(
                       x: position.localPosition.dx,
                       y: position.localPosition.dy,
@@ -266,5 +266,15 @@ class _HomeScreenState extends State<HomeScreen> {
     for (int i = indexes.length - 1; i >= 0; i--) {
       connections.removeAt(indexes[i]);
     }
+  }
+
+  bool isInsideScreen(double x, double y) {
+    if (x - radius > 0 &&
+        x + radius < MediaQuery.of(context).size.width &&
+        y - radius > 0 &&
+        y + radius < MediaQuery.of(context).size.height - 250) {
+      return true;
+    }
+    return false;
   }
 }
