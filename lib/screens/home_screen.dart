@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 content: 'Nombre del Nodo',
                 cancelAction: () {
                   setState(() {
-                    state = 0;
+                    state = 1;
                     deleteConnections(nodes.length - 1);
                     nodes.removeLast();
                   });
