@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 
-class CustomAlertDialogEditNodeName extends StatelessWidget {
+class CustomAlertDialogNodeName extends StatelessWidget {
   final String title;
   final String content;
+  final String? text;
   final Function cancelAction;
   final Function confirmAction;
 
-  const CustomAlertDialogEditNodeName({
+  const CustomAlertDialogNodeName({
     Key? key,
     required this.title,
     required this.content,
+    this.text,
     required this.cancelAction,
     required this.confirmAction,
   }) : super(key: key);
@@ -17,11 +19,13 @@ class CustomAlertDialogEditNodeName extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = TextEditingController();
+    controller.text = text ?? '';
     return AlertDialog(
       title: Text(title),
       content: Form(
         autovalidateMode: AutovalidateMode.always,
         child: TextFormField(
+          autofocus: true,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             border: const OutlineInputBorder(),

@@ -14,4 +14,24 @@ class Connection extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomPaint(painter: Line(posX1: x1, posY1: y1, posX2: x2, posY2: y2, text: text));
   }
+
+  Connection copyWith({
+    double? x1,
+    double? y1,
+    double? x2,
+    double? y2,
+    String? text,
+  }) {
+    return Connection(
+      x1: x1 ?? this.x1,
+      y1: y1 ?? this.y1,
+      x2: x2 ?? this.x2,
+      y2: y2 ?? this.y2,
+      text: text ?? this.text,
+    );
+  }
+
+  bool isInside(double dx, double dy) {
+    return (dx - x1).abs() < 30 && (dy - y1).abs() < 30;
+  }
 }

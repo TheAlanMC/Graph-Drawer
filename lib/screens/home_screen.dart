@@ -13,11 +13,16 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Node> nodes = [];
   List<Connection> connections = [];
 
+  int elementIndex = -1;
+
   String name = '';
   double radius = 40;
 
+  bool allowEditNode = false;
+
+  bool allowEditConnection = false;
+
   bool allowDrag = false;
-  int dragNode = -1;
 
   Random random = Random();
   int state = 0;
@@ -34,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ...connections,
           ...nodes,
           if (state == 1)
-            CustomAlertDialogEditNodeName(
+            CustomAlertDialogNodeName(
                 title: 'Agregar Nodo',
                 content: 'Nombre del Nodo',
                 cancelAction: () {
@@ -66,13 +71,53 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-          if (state == 4)
+          if (state == 3)
             GestureDetector(
               onPanDown: (position) {
                 setState(() {
                   for (int i = 0; i < nodes.length; i++) {
                     if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-                      dragNode = i;
+                      elementIndex = i;
+                      allowEditNode = true;
+                      state = 4;
+                      break;
+                    }
+                  }
+                  for (int i = 0; i < connections.length; i++) {
+                    if (connections[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                      elementIndex = i;
+                      allowEditConnection = true;
+                      state = 4;
+                      break;
+                    }
+                  }
+                });
+                if (state != 4) state = 0;
+              },
+            ),
+          if (state == 4 && allowEditNode)
+            CustomAlertDialogNodeName(
+                title: 'Editar Nodo',
+                content: 'Nombre del Nodo',
+                cancelAction: () {
+                  setState(() {
+                    state = 0;
+                  });
+                },
+                confirmAction: (value) {
+                  setState(() {
+                    nodes[elementIndex] = nodes[elementIndex].copyWith(text: value);
+                    state = 0;
+                  });
+                },
+                text: nodes[elementIndex].text),
+          if (state == 5)
+            GestureDetector(
+              onPanDown: (position) {
+                setState(() {
+                  for (int i = 0; i < nodes.length; i++) {
+                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                      elementIndex = i;
                       allowDrag = true;
                       break;
                     }
@@ -82,8 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onPanUpdate: (position) {
                 setState(() {
                   if (allowDrag) {
-                    Node tempNode = nodes[dragNode].copyWith(x: position.localPosition.dx, y: position.localPosition.dy);
-                    nodes[dragNode] = tempNode;
+                    Node tempNode = nodes[elementIndex].copyWith(x: position.localPosition.dx, y: position.localPosition.dy);
+                    nodes[elementIndex] = tempNode;
                     updateConnections();
                   }
                 });
@@ -97,12 +142,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
                 setState(() {
                   allowDrag = false;
-                  dragNode = -1;
+                  elementIndex = -1;
                   state = 0;
                 });
               },
             ),
-          if (state == 5)
+          if (state == 6)
             GestureDetector(
               onTapDown: (position) {
                 setState(
@@ -136,6 +181,12 @@ class _HomeScreenState extends State<HomeScreen> {
               });
               break;
             case 1:
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Presione en el peso de la conexión o en el nodo para editar.'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
               setState(() {
                 state = 3;
               });
@@ -148,11 +199,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
               setState(() {
-                state = 4;
+                state = 5;
               });
               break;
             case 3:
-              state = 5;
+              state = 6;
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Presione en un nodo para eliminarlo.'),
@@ -160,7 +211,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
               setState(() {
-                state = 5;
+                state = 6;
               });
               break;
           }
