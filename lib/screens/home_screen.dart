@@ -275,14 +275,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void deleteConnections(int index) {
-    List<int> indexes = [];
     for (int i = 0; i < connections.length; i++) {
       if (connections[i].start == index || connections[i].end == index) {
-        indexes.add(i);
+        connections.removeAt(i);
+        i--;
+      } else {
+        if (connections[i].start > index) connections[i] = connections[i].copyWith(start: connections[i].start - 1);
+        if (connections[i].end > index) connections[i] = connections[i].copyWith(end: connections[i].end - 1);
       }
-    }
-    for (int i = indexes.length - 1; i >= 0; i--) {
-      connections.removeAt(indexes[i]);
     }
   }
 

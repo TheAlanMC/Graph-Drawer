@@ -31,6 +31,8 @@ class ConnectionModel extends StatelessWidget {
     double? x2,
     double? y2,
     String? text,
+    int? start,
+    int? end,
   }) {
     return ConnectionModel(
       x1: x1 ?? this.x1,
@@ -38,8 +40,8 @@ class ConnectionModel extends StatelessWidget {
       x2: x2 ?? this.x2,
       y2: y2 ?? this.y2,
       text: text ?? this.text,
-      start: start,
-      end: end,
+      start: start ?? this.start,
+      end: end ?? this.end,
     );
   }
 
