@@ -32,6 +32,8 @@ class Connection extends StatelessWidget {
   }
 
   bool isInside(double dx, double dy) {
-    return (dx - x1).abs() < 30 && (dy - y1).abs() < 30;
+    double x = (x1 + x2) / 2;
+    double y = (y1 + y2) / 2;
+    return (dx - x).abs() < 15 && (dy - y).abs() < 15;
   }
 }

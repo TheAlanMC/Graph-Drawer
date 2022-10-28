@@ -54,9 +54,9 @@ class CustomAlertDialogNodeName extends StatelessWidget {
               if (controller.text.length == 1 && controller.text.isNotEmpty) {
                 confirmAction(controller.text.toUpperCase());
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Presione en la pantalla para agregar el nodo.'),
-                    duration: Duration(seconds: 2),
+                  SnackBar(
+                    content: text == null ? const Text('Presione en la pantalla para agregar el nodo.') : const Text('Nodo editado.'),
+                    duration: const Duration(seconds: 2),
                   ),
                 );
               } else {

@@ -101,16 +101,40 @@ class _HomeScreenState extends State<HomeScreen> {
                 content: 'Nombre del Nodo',
                 cancelAction: () {
                   setState(() {
+                    elementIndex = -1;
+                    allowEditNode = false;
                     state = 0;
                   });
                 },
                 confirmAction: (value) {
                   setState(() {
                     nodes[elementIndex] = nodes[elementIndex].copyWith(text: value);
+                    elementIndex = -1;
+                    allowEditNode = false;
                     state = 0;
                   });
                 },
                 text: nodes[elementIndex].text),
+          if (state == 4 && allowEditConnection)
+            CustomAlertDialogNodeName(
+                title: 'Editar Conexion',
+                content: 'Peso de la Conexion',
+                cancelAction: () {
+                  setState(() {
+                    elementIndex = -1;
+                    allowEditConnection = false;
+                    state = 0;
+                  });
+                },
+                confirmAction: (value) {
+                  setState(() {
+                    connections[elementIndex] = connections[elementIndex].copyWith(text: value);
+                    elementIndex = -1;
+                    allowEditConnection = false;
+                    state = 0;
+                  });
+                },
+                text: connections[elementIndex].text),
           if (state == 5)
             GestureDetector(
               onPanDown: (position) {
