@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       radius: radius,
                       text: name,
                     ));
-                    updateConnections();
+                    addConnections();
                   },
                 );
               },
@@ -151,9 +151,11 @@ class _HomeScreenState extends State<HomeScreen> {
               onPanUpdate: (position) {
                 setState(() {
                   if (allowDrag) {
-                    Node tempNode = nodes[elementIndex].copyWith(x: position.localPosition.dx, y: position.localPosition.dy);
-                    nodes[elementIndex] = tempNode;
-                    updateConnections();
+                    nodes[elementIndex] = nodes[elementIndex].copyWith(
+                      x: position.localPosition.dx,
+                      y: position.localPosition.dy,
+                    );
+                    editConnections();
                   }
                 });
               },
@@ -174,8 +176,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     for (int i = 0; i < nodes.length; i++) {
                       if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
                         nodes.removeAt(i);
+                        deleteConnections(i);
                         state = 0;
-                        updateConnections();
                         customScaffoldMessenger(context: context, text: 'Nodo eliminado.');
                         break;
                       }
@@ -219,18 +221,46 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void updateConnections() {
-    connections.clear();
+  void addConnections() {
     for (int i = 0; i < nodes.length - 1; i++) {
-      for (int j = i + 1; j < nodes.length; j++) {
-        connections.add(Connection(
-          x1: nodes[i].x,
-          y1: nodes[i].y,
-          x2: nodes[j].x,
-          y2: nodes[j].y,
-          text: '1',
-        ));
+      connections.add(Connection(
+        x1: nodes[i].x,
+        y1: nodes[i].y,
+        x2: nodes[nodes.length - 1].x,
+        y2: nodes[nodes.length - 1].y,
+        text: '1',
+        start: i,
+        end: nodes.length - 1,
+      ));
+    }
+  }
+
+  void editConnections() {
+    for (int i = 0; i < connections.length; i++) {
+      if (connections[i].start == elementIndex) {
+        connections[i] = connections[i].copyWith(
+          x1: nodes[elementIndex].x,
+          y1: nodes[elementIndex].y,
+        );
       }
+      if (connections[i].end == elementIndex) {
+        connections[i] = connections[i].copyWith(
+          x2: nodes[elementIndex].x,
+          y2: nodes[elementIndex].y,
+        );
+      }
+    }
+  }
+
+  void deleteConnections(int index) {
+    List<int> indexes = [];
+    for (int i = 0; i < connections.length; i++) {
+      if (connections[i].start == index || connections[i].end == index) {
+        indexes.add(i);
+      }
+    }
+    for (int i = indexes.length - 1; i >= 0; i--) {
+      connections.removeAt(indexes[i]);
     }
   }
 }

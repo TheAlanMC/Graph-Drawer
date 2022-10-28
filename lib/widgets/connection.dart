@@ -7,8 +7,18 @@ class Connection extends StatelessWidget {
   final double x2;
   final double y2;
   final String text;
+  final int start;
+  final int end;
 
-  const Connection({super.key, required this.x1, required this.y1, required this.x2, required this.y2, required this.text});
+  const Connection(
+      {super.key,
+      required this.x1,
+      required this.y1,
+      required this.x2,
+      required this.y2,
+      required this.text,
+      required this.start,
+      required this.end});
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +38,8 @@ class Connection extends StatelessWidget {
       x2: x2 ?? this.x2,
       y2: y2 ?? this.y2,
       text: text ?? this.text,
+      start: start,
+      end: end,
     );
   }
 
