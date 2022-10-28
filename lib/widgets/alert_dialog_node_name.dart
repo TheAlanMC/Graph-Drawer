@@ -31,6 +31,7 @@ class CustomAlertDialogNodeName extends StatelessWidget {
           decoration: InputDecoration(
             border: const OutlineInputBorder(),
             labelText: content,
+            errorMaxLines: 2,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
