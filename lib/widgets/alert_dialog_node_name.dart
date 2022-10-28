@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:graph_drawer/widgets/widgets.dart';
 
 class CustomAlertDialogNodeName extends StatelessWidget {
   final String title;
@@ -49,23 +50,16 @@ class CustomAlertDialogNodeName extends StatelessWidget {
           onPressed: () => cancelAction(),
         ),
         TextButton(
-            child: const Text("Continuar"),
+            child: const Text("Confirmar"),
             onPressed: () {
               if (controller.text.length == 1 && controller.text.isNotEmpty) {
                 confirmAction(controller.text.toUpperCase());
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: text == null ? const Text('Presione en la pantalla para agregar el nodo.') : const Text('Nodo editado.'),
-                    duration: const Duration(seconds: 2),
-                  ),
+                customScaffoldMessenger(
+                  context: context,
+                  text: text == null ? 'Presione en la pantalla para agregar el nodo.' : 'Nodo editado.',
                 );
               } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Por favor ingrese una letra o un número.'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                customScaffoldMessenger(context: context, text: 'Por favor ingrese una letra o un número.');
               }
             }),
       ],

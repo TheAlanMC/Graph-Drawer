@@ -158,12 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
               onPanEnd: (position) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Nodo movido.'),
-                    duration: Duration(seconds: 2),
-                  ),
-                );
+                customScaffoldMessenger(context: context, text: 'Nodo movido.');
                 setState(() {
                   allowDrag = false;
                   elementIndex = -1;
@@ -181,12 +176,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         nodes.removeAt(i);
                         state = 0;
                         updateConnections();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Nodo eliminado.'),
-                            duration: Duration(seconds: 2),
-                          ),
-                        );
+                        customScaffoldMessenger(context: context, text: 'Nodo eliminado.');
                         break;
                       }
                     }
@@ -205,35 +195,20 @@ class _HomeScreenState extends State<HomeScreen> {
               });
               break;
             case 1:
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Presione en el peso de la conexión o en el nodo para editar.'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              customScaffoldMessenger(context: context, text: 'Presione en el peso de la conexión o en el nodo para editar.');
               setState(() {
                 state = 3;
               });
               break;
             case 2:
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Presione en un nodo para moverlo.'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              customScaffoldMessenger(context: context, text: 'Presione en un nodo para moverlo.');
               setState(() {
                 state = 5;
               });
               break;
             case 3:
               state = 6;
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Presione en un nodo para eliminarlo.'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              customScaffoldMessenger(context: context, text: 'Presione en un nodo para eliminarlo.');
               setState(() {
                 state = 6;
               });
