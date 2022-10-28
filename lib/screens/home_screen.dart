@@ -14,17 +14,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<NodeModel> nodes = [];
   List<ConnectionModel> connections = [];
-
   int elementIndex = -1;
-
-  String name = '';
   double radius = 40;
-
   bool allowEditNode = false;
-
   bool allowEditConnection = false;
-
   bool allowDrag = false;
+  int state = 0;
 
   List<String> messages = [
     'Selecione un botón',
@@ -36,8 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'Modo Eliminar Nodo',
   ];
 
-  Random random = Random();
-  int state = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -285,10 +278,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   bool isInsideScreen(double x, double y) {
+    final topPadding = MediaQuery.of(context).padding.top + kToolbarHeight;
+    final bottomPadding = MediaQuery.of(context).padding.bottom + kBottomNavigationBarHeight;
     if (x - radius > 0 &&
         x + radius < MediaQuery.of(context).size.width &&
         y - radius > 0 &&
-        y + radius < MediaQuery.of(context).size.height - 250) {
+        y + radius < MediaQuery.of(context).size.height - topPadding - bottomPadding - radius / 2) {
       return true;
     }
     return false;
