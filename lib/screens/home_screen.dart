@@ -60,15 +60,17 @@ class _HomeScreenState extends State<HomeScreen> {
               onTapDown: (position) {
                 setState(
                   () {
-                    state = 0;
-                    nodes.add(GraphModel(
-                      x: position.localPosition.dx,
-                      y: position.localPosition.dy,
-                      color: Colors.indigo,
-                      radius: radius,
-                      text: name,
-                    ));
-                    addConnections();
+                    if (position.localPosition.dx - radius > 0 && position.localPosition.dy - radius > 0) {
+                      state = 0;
+                      nodes.add(GraphModel(
+                        x: position.localPosition.dx,
+                        y: position.localPosition.dy,
+                        color: Colors.indigo,
+                        radius: radius,
+                        text: name,
+                      ));
+                      addConnections();
+                    }
                   },
                 );
               },
@@ -152,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               onPanUpdate: (position) {
                 setState(() {
-                  if (allowDrag) {
+                  if (allowDrag && position.localPosition.dx - radius > 0 && position.localPosition.dy - radius > 0) {
                     nodes[elementIndex] = nodes[elementIndex].copyWith(
                       x: position.localPosition.dx,
                       y: position.localPosition.dy,
