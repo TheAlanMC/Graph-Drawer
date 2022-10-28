@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/widgets.dart';
+import 'package:graph_drawer/models/models.dart';
+import 'package:graph_drawer/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -10,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Node> nodes = [];
+  List<GraphModel> nodes = [];
   List<Connection> connections = [];
 
   int elementIndex = -1;
@@ -59,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 setState(
                   () {
                     state = 0;
-                    nodes.add(Node(
+                    nodes.add(GraphModel(
                       x: position.localPosition.dx,
                       y: position.localPosition.dy,
                       color: Colors.indigo,

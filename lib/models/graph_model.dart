@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/graph.dart';
 
-class Node extends StatelessWidget {
+class GraphModel extends StatelessWidget {
   final Color color;
   final double x;
   final double y;
   final double radius;
   final String text;
 
-  const Node({super.key, required this.color, required this.x, required this.y, required this.radius, required this.text});
+  const GraphModel({super.key, required this.color, required this.x, required this.y, required this.radius, required this.text});
 
   bool isInside(double dx, double dy) {
     return (dx - x).abs() < radius && (dy - y).abs() < radius;
@@ -21,14 +21,14 @@ class Node extends StatelessWidget {
     );
   }
 
-  Node copyWith({
+  GraphModel copyWith({
     Color? color,
     double? x,
     double? y,
     double? radius,
     String? text,
   }) {
-    return Node(
+    return GraphModel(
       color: color ?? this.color,
       x: x ?? this.x,
       y: y ?? this.y,

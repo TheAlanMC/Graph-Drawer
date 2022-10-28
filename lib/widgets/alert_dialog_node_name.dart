@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graph_drawer/widgets/widgets.dart';
+import 'package:graph_drawer/utils/utils.dart';
 
 class CustomAlertDialogNodeName extends StatelessWidget {
   final String title;
