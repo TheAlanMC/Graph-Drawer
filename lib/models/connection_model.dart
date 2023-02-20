@@ -9,6 +9,7 @@ class ConnectionModel extends StatelessWidget {
   final String text;
   final int start;
   final int end;
+  final Color color;
 
   const ConnectionModel(
       {super.key,
@@ -18,11 +19,20 @@ class ConnectionModel extends StatelessWidget {
       required this.y2,
       required this.text,
       required this.start,
-      required this.end});
+      required this.end,
+      required this.color});
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(painter: Connection(posX1: x1, posY1: y1, posX2: x2, posY2: y2, text: text));
+    return CustomPaint(
+        painter: Connection(
+      posX1: x1,
+      posY1: y1,
+      posX2: x2,
+      posY2: y2,
+      text: text,
+      color: color,
+    ));
   }
 
   ConnectionModel copyWith({
@@ -33,6 +43,7 @@ class ConnectionModel extends StatelessWidget {
     String? text,
     int? start,
     int? end,
+    Color? color,
   }) {
     return ConnectionModel(
       x1: x1 ?? this.x1,
@@ -42,6 +53,7 @@ class ConnectionModel extends StatelessWidget {
       text: text ?? this.text,
       start: start ?? this.start,
       end: end ?? this.end,
+      color: color ?? this.color,
     );
   }
 

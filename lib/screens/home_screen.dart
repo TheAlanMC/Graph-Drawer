@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/widgets.dart';
 import 'package:graph_drawer/models/models.dart';
@@ -13,13 +14,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<NodeModel> nodes = [];
+  List<int> selectedNodes = [];
   List<ConnectionModel> connections = [];
+  List<ConnectionModel> connectionsToDraw = [];
+
   int elementIndex = -1;
   double radius = 40;
   bool allowEditNode = false;
   bool allowEditConnection = false;
   bool allowDrag = false;
   int state = 0;
+  Random random = Random();
 
   List<String> messages = [
     'Selecione un botón',
@@ -29,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Modo Edición Nodo o Conexión',
     'Modo Mover Nodo',
     'Modo Eliminar Nodo',
+    'Modo Sumar Distancia',
   ];
 
   @override
@@ -42,6 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Stack(
         children: [
           ...connections,
+          ...connectionsToDraw,
           ...nodes,
           if (state == 1)
             GestureDetector(
@@ -193,6 +200,39 @@ class _HomeScreenState extends State<HomeScreen> {
                 });
               },
             ),
+          if (state == 7)
+            GestureDetector(
+              onTapDown: (position) {
+                setState(() {
+                  for (int i = 0; i < nodes.length; i++) {
+                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                      selectedNodes.add(i);
+                      nodes[i] =
+                          nodes[i].copyWith(color: Color.fromRGBO(random.nextInt(255), random.nextInt(255), random.nextInt(255), 1));
+                      break;
+                    }
+                  }
+                  drawConnections();
+                });
+              },
+            ),
+          if (state == 7)
+            Container(
+              alignment: Alignment.bottomCenter,
+              child: Card(
+                color: Colors.indigo,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    sumConnectionsWeigth().toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -228,6 +268,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 state = nodes.isNotEmpty ? 6 : 0;
               });
               break;
+            case 4:
+              customScaffoldMessenger(
+                  context: context,
+                  text: connections.isNotEmpty ? 'Presione en un nodos para sumar la distancia' : 'Primero debe agregar dos nodos.');
+              setState(() {
+                state = connections.isNotEmpty ? 7 : 0;
+              });
           }
         },
       ),
@@ -244,6 +291,7 @@ class _HomeScreenState extends State<HomeScreen> {
         text: '1',
         start: i,
         end: nodes.length - 1,
+        color: Colors.indigo,
       ));
     }
   }
@@ -287,5 +335,28 @@ class _HomeScreenState extends State<HomeScreen> {
       return true;
     }
     return false;
+  }
+
+  int sumConnectionsWeigth() {
+    int sum = 0;
+    for (int i = 0; i < connectionsToDraw.length; i++) {
+      sum += int.parse(connectionsToDraw[i].text);
+      connectionsToDraw[i] = connectionsToDraw[i].copyWith(color: Colors.amber);
+    }
+    return sum;
+  }
+
+  void drawConnections() {
+    connectionsToDraw.clear();
+    for (int i = 0; i < selectedNodes.length - 1; i++) {
+      for (int j = 0; j < connections.length; j++) {
+        if (connections[j].start == selectedNodes[i] && connections[j].end == selectedNodes[i + 1]) {
+          connectionsToDraw.add(connections[j]);
+        }
+      }
+    }
+    for (int i = 0; i < connectionsToDraw.length; i++) {
+      connectionsToDraw[i] = connectionsToDraw[i].copyWith(color: Colors.red);
+    }
   }
 }

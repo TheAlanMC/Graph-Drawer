@@ -19,6 +19,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.edit_outlined, size: 45), label: 'Distancia entre Nodos'),
           BottomNavigationBarItem(icon: Icon(Icons.move_down_outlined, size: 45), label: 'Modificar Nodo'),
           BottomNavigationBarItem(icon: Icon(Icons.delete_outlined, size: 45), label: 'Eliminar Nodo'),
+          BottomNavigationBarItem(icon: Icon(Icons.add_outlined, size: 45), label: 'Sumar Distancias'),
         ],
         onTap: ((value) => onTap(value)));
   }

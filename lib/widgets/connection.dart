@@ -6,17 +6,25 @@ class Connection extends CustomPainter {
   final double posX2;
   final double posY2;
   final String text;
+  final Color color;
 
-  Connection({required this.posX1, required this.posY1, required this.posX2, required this.posY2, required this.text});
+  Connection({
+    required this.posX1,
+    required this.posY1,
+    required this.posX2,
+    required this.posY2,
+    required this.text,
+    required this.color,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.indigo
+      ..color = color
       ..style = PaintingStyle.fill;
 
     final Paint border = Paint()
-      ..color = Colors.indigo
+      ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
