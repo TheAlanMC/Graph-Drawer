@@ -12,7 +12,7 @@ class Node extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = color
+      ..color = Colors.transparent
       ..style = PaintingStyle.fill;
 
     final Paint border = Paint()
@@ -28,7 +28,7 @@ class Node extends CustomPainter {
       text: TextSpan(
         text: text,
         style: TextStyle(
-          color: Colors.white,
+          color: Colors.transparent,
           fontSize: radius - 10,
         ),
       ),

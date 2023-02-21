@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/widgets.dart';
 import 'package:graph_drawer/models/models.dart';
@@ -13,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<NodeModel> nodes = [];
-  List<ConnectionModel> connections = [];
+  List<EdgeModel> edges = [];
   int elementIndex = -1;
   double radius = 40;
   bool allowEditNode = false;
@@ -31,6 +30,8 @@ class _HomeScreenState extends State<HomeScreen> {
     'Modo Eliminar Nodo',
   ];
 
+  int currentSelectedIndex = -1;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          ...connections,
+          ...edges,
           ...nodes,
           if (state == 1)
             GestureDetector(
@@ -92,8 +93,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       break;
                     }
                   }
-                  for (int i = 0; i < connections.length; i++) {
-                    if (connections[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                  for (int i = 0; i < edges.length; i++) {
+                    if (edges[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
                       elementIndex = i;
                       allowEditConnection = true;
                       state = 4;
@@ -137,13 +138,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 confirmAction: (value) {
                   setState(() {
-                    connections[elementIndex] = connections[elementIndex].copyWith(text: value);
+                    edges[elementIndex] = edges[elementIndex].copyWith(text: value);
                     elementIndex = -1;
                     allowEditConnection = false;
                     state = 3;
                   });
                 },
-                text: connections[elementIndex].text),
+                text: edges[elementIndex].text),
           if (state == 5)
             GestureDetector(
               onPanDown: (position) {
@@ -203,23 +204,23 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 state = 1;
               });
+              currentSelectedIndex = 0;
               break;
             case 1:
               customScaffoldMessenger(
                   context: context,
-                  text: nodes.isNotEmpty
-                      ? 'Presione en el peso de la conexión o en el nodo para editar.'
-                      : 'Primero debe agregar nodos.');
+                  text: nodes.isNotEmpty ? 'Presione en el peso de la conexión o en el nodo para editar.' : 'Primero debe agregar nodos.');
               setState(() {
                 state = nodes.isNotEmpty ? 3 : 0;
               });
+              currentSelectedIndex = 1;
               break;
             case 2:
-              customScaffoldMessenger(
-                  context: context, text: nodes.isNotEmpty ? 'Presione en un nodo para moverlo.' : 'Primero debe agregar nodos.');
+              customScaffoldMessenger(context: context, text: nodes.isNotEmpty ? 'Presione en un nodo para moverlo.' : 'Primero debe agregar nodos.');
               setState(() {
                 state = nodes.isNotEmpty ? 5 : 0;
               });
+              currentSelectedIndex = 2;
               break;
             case 3:
               customScaffoldMessenger(
@@ -227,16 +228,18 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 state = nodes.isNotEmpty ? 6 : 0;
               });
+              currentSelectedIndex = 3;
               break;
           }
         },
+        currentIndex: currentSelectedIndex,
       ),
     );
   }
 
   void addConnections() {
     for (int i = 0; i < nodes.length - 1; i++) {
-      connections.add(ConnectionModel(
+      edges.add(EdgeModel(
         x1: nodes[i].x,
         y1: nodes[i].y,
         x2: nodes.last.x,
@@ -244,20 +247,21 @@ class _HomeScreenState extends State<HomeScreen> {
         text: '1',
         start: i,
         end: nodes.length - 1,
+        radius: radius,
       ));
     }
   }
 
   void editConnections() {
-    for (int i = 0; i < connections.length; i++) {
-      if (connections[i].start == elementIndex) {
-        connections[i] = connections[i].copyWith(
+    for (int i = 0; i < edges.length; i++) {
+      if (edges[i].start == elementIndex) {
+        edges[i] = edges[i].copyWith(
           x1: nodes[elementIndex].x,
           y1: nodes[elementIndex].y,
         );
       }
-      if (connections[i].end == elementIndex) {
-        connections[i] = connections[i].copyWith(
+      if (edges[i].end == elementIndex) {
+        edges[i] = edges[i].copyWith(
           x2: nodes[elementIndex].x,
           y2: nodes[elementIndex].y,
         );
@@ -266,13 +270,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void deleteConnections(int index) {
-    for (int i = 0; i < connections.length; i++) {
-      if (connections[i].start == index || connections[i].end == index) {
-        connections.removeAt(i);
+    for (int i = 0; i < edges.length; i++) {
+      if (edges[i].start == index || edges[i].end == index) {
+        edges.removeAt(i);
         i--;
       } else {
-        if (connections[i].start > index) connections[i] = connections[i].copyWith(start: connections[i].start - 1);
-        if (connections[i].end > index) connections[i] = connections[i].copyWith(end: connections[i].end - 1);
+        if (edges[i].start > index) edges[i] = edges[i].copyWith(start: edges[i].start - 1);
+        if (edges[i].end > index) edges[i] = edges[i].copyWith(end: edges[i].end - 1);
       }
     }
   }
