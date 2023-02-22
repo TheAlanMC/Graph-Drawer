@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:graph_drawer/utils/utils.dart';
 
-class CustomAlertDialogNodeName extends StatelessWidget {
+class CustomAlertDialogEdgeCost extends StatelessWidget {
   final String title;
   final String content;
   final String? text;
   final Function cancelAction;
   final Function confirmAction;
-  final List<String>? nodes;
-  const CustomAlertDialogNodeName({
+  const CustomAlertDialogEdgeCost({
     Key? key,
     required this.title,
     required this.content,
     this.text,
     required this.cancelAction,
     required this.confirmAction,
-    this.nodes,
   }) : super(key: key);
 
   @override
@@ -42,8 +40,8 @@ class CustomAlertDialogNodeName extends StatelessWidget {
             ),
             validator: (value) {
               value = value?.trim();
-              if (value == null || value.isEmpty || int.tryParse(value) != null) {
-                return 'Ingrese un nombre válido.';
+              if (value == null || value.isEmpty || !(int.tryParse(value) != null) || int.tryParse(value)! < 0) {
+                return 'Ingrese un costo válido.';
               }
               return null;
             },
@@ -52,12 +50,10 @@ class CustomAlertDialogNodeName extends StatelessWidget {
             textInputAction: TextInputAction.done,
             onFieldSubmitted: (value) {
               controller.text = controller.text.trim();
-              if (nodes!.contains(controller.text.toUpperCase())) {
-                customScaffoldMessenger(context: context, text: 'Error, vértice duplicado.');
-              } else if (controller.text.isNotEmpty && int.tryParse(controller.text) == null) {
-                confirmAction(controller.text.toUpperCase());
+              if (controller.text.isNotEmpty && !(int.tryParse(controller.text) == null) && int.tryParse(controller.text)! >= 0) {
+                confirmAction(controller.text);
               } else {
-                customScaffoldMessenger(context: context, text: 'Ingrese un nombre válido.');
+                customScaffoldMessenger(context: context, text: 'Ingrese un costo válido.');
               }
             },
           ),
@@ -69,12 +65,10 @@ class CustomAlertDialogNodeName extends StatelessWidget {
               ElevatedButton(
                   onPressed: () {
                     controller.text = controller.text.trim();
-                    if (nodes!.contains(controller.text.toUpperCase())) {
-                      customScaffoldMessenger(context: context, text: 'Error, vértice duplicado.');
-                    } else if (controller.text.isNotEmpty && int.tryParse(controller.text) == null) {
-                      confirmAction(controller.text.toUpperCase());
+                    if (controller.text.isNotEmpty && !(int.tryParse(controller.text) == null) && int.tryParse(controller.text)! >= 0) {
+                      confirmAction(controller.text);
                     } else {
-                      customScaffoldMessenger(context: context, text: 'Ingrese un nombre válido.');
+                      customScaffoldMessenger(context: context, text: 'Ingrese un costo válido.');
                     }
                   },
                   child: const Text('Aceptar')),

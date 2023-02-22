@@ -53,7 +53,11 @@ class Edge extends CustomPainter {
       textDirection: TextDirection.ltr,
     );
     textPainter.layout();
-    textPainter.paint(canvas, Offset((posX1 + posX2) / 2 - 20, (posY1 + posY2) / 2 - 20));
+    if (posX2 < posX1) {
+      textPainter.paint(canvas, Offset(posX2 + 30, posY2));
+    } else {
+      textPainter.paint(canvas, Offset(posX2 - 30, posY2));
+    }
   }
 
   @override
