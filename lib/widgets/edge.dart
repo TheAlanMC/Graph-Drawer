@@ -63,9 +63,9 @@ class Edge extends CustomPainter {
       );
       textPainter.layout();
       if (posX2 < posX1) {
-        textPainter.paint(canvas, Offset((posX1 + posX2) / 2 - 30, (posY1 + posY2) / 2 + 30));
+        textPainter.paint(canvas, Offset((posX1 + posX2) / 2 - 15, (posY1 + posY2) / 2 - 15));
       } else {
-        textPainter.paint(canvas, Offset((posX1 + posX2) / 2 - 30, (posY1 + posY2) / 2 - 30));
+        textPainter.paint(canvas, Offset((posX1 + posX2) / 2 + 15, (posY1 + posY2) / 2 + 15));
       }
     } else {
       final Paint edge = Paint()

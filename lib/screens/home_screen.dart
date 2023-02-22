@@ -34,8 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Stack(
         children: [
-          ...nodes,
           ...edges,
+
+          ...nodes,
           if (state == 1)
             GestureDetector(
               onTapDown: (position) {
@@ -146,7 +147,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   state = 3;
                 });
               },
-            )
+            ),
+          if (state == 6)
+            GestureDetector(
+              onTapDown: (position) {
+                setState(() {
+                  for (int i = 0; i < nodes.length; i++) {
+                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                      nodes.removeAt(i);
+                      break;
+                    }
+                  }
+                  for (int i = 0; i < edges.length; i++) {
+                    if (edges[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                      edges.removeAt(i);
+                      break;
+                    }
+                  }
+                });
+              },
+            ),
           // if (state == 3)
           // if (state == 5)
           //   GestureDetector(
@@ -239,21 +259,6 @@ class _HomeScreenState extends State<HomeScreen> {
           //       });
           //     },
           //   ),
-          // if (state == 6)
-          //   GestureDetector(
-          //     onTapDown: (position) {
-          //       setState(() {
-          //         for (int i = 0; i < nodes.length; i++) {
-          //           if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-          //             nodes.removeAt(i);
-          //             state = nodes.isEmpty ? 0 : 6;
-          //             customScaffoldMessenger(context: context, text: 'Nodo eliminado.');
-          //             break;
-          //           }
-          //         }
-          //       });
-          //     },
-          //   ),
         ],
       ),
       bottomNavigationBar: CustomBottomNavigationBar(
@@ -274,9 +279,8 @@ class _HomeScreenState extends State<HomeScreen> {
               currentSelectedIndex = 1;
               break;
             case 2:
-              customScaffoldMessenger(context: context, text: nodes.isNotEmpty ? 'Presione en un nodo para moverlo.' : 'Primero debe agregar nodos.');
               setState(() {
-                state = nodes.isNotEmpty ? 5 : 0;
+                state = 6;
               });
               currentSelectedIndex = 2;
               break;
