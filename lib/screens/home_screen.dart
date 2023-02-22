@@ -14,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<NodeModel> nodes = [];
   List<String> nodesNames = [];
   List<EdgeModel> edges = [];
-  List<String> edgesConnections = [];
+  List<EdgeConnection> edgesConnections = [];
   NodeModel? sourceNode;
   NodeModel? targetNode;
   int elementIndex = -1;
@@ -123,8 +123,24 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               confirmAction: (value) {
                 setState(() {
-                  edgesConnections.add('$value (${sourceNode!.text}, ${targetNode!.text})');
-                  edges.last = edges.last.copyWith(text: value);
+                  edgesConnections.add(EdgeConnection(
+                    source: sourceNode!.text,
+                    target: targetNode!.text,
+                    cost: int.parse(value),
+                  ));
+                  bool duplicate = false;
+                  for (int i = 0; i < edgesConnections.length - 1; i++) {
+                    if (edgesConnections[i].source == edgesConnections.last.source && edgesConnections[i].target == edgesConnections.last.target) {
+                      edgesConnections.removeLast();
+                      edges.removeLast();
+                      edges[i] = edges[i].copyWith(text: value.toString());
+                      duplicate = true;
+                      break;
+                    }
+                  }
+                  if (!duplicate) {
+                    edges.last = edges.last.copyWith(text: value);
+                  }
                   sourceNode = null;
                   targetNode = null;
                   state = 3;
