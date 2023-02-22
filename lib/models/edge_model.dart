@@ -13,6 +13,9 @@ class EdgeModel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (x2 == x1 && y2 == y1) {
+      return CustomPaint(painter: Edge(posX1: x1, posY1: y1 - radius, posX2: x2 - radius, posY2: y2, text: text, radius: radius, auto: true));
+    }
     if ((x2 - x1) > 100) {
       return CustomPaint(painter: Edge(posX1: x1 + radius, posY1: y1, posX2: x2 - radius, posY2: y2, text: text, radius: radius));
     } else if ((x1 - x2) > 100) {
