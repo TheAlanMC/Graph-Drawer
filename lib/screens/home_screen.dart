@@ -14,21 +14,11 @@ class _HomeScreenState extends State<HomeScreen> {
   List<NodeModel> nodes = [];
   List<EdgeModel> edges = [];
   int elementIndex = -1;
-  double radius = 40;
+  double radius = 30;
   bool allowEditNode = false;
   bool allowEditConnection = false;
   bool allowDrag = false;
   int state = 0;
-
-  List<String> messages = [
-    'Selecione un botón',
-    'Modo Agregar Nodo',
-    'Modo Agregar Nodo',
-    'Modo Edición Nodo o Conexión',
-    'Modo Edición Nodo o Conexión',
-    'Modo Mover Nodo',
-    'Modo Eliminar Nodo',
-  ];
 
   int currentSelectedIndex = -1;
 
@@ -36,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(messages[state]),
+        title: const Text('Generación de Grafos'),
         centerTitle: true,
         backgroundColor: Colors.indigo,
       ),
@@ -58,7 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         radius: radius,
                         text: '',
                       ));
-                      addConnections();
                     }
                   },
                 );
@@ -66,12 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           if (state == 2)
             CustomAlertDialogNodeName(
-                title: 'Agregar Nodo',
-                content: 'Nombre del Nodo',
+                title: 'Añadir vértice',
+                content: 'Nombre del vértice:',
                 cancelAction: () {
                   setState(() {
-                    state = 0;
-                    deleteConnections(nodes.length - 1);
+                    state = 1;
                     nodes.removeLast();
                   });
                 },
@@ -185,7 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   for (int i = 0; i < nodes.length; i++) {
                     if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
                       nodes.removeAt(i);
-                      deleteConnections(i);
                       state = nodes.isEmpty ? 0 : 6;
                       customScaffoldMessenger(context: context, text: 'Nodo eliminado.');
                       break;
@@ -237,21 +224,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void addConnections() {
-    for (int i = 0; i < nodes.length - 1; i++) {
-      edges.add(EdgeModel(
-        x1: nodes[i].x,
-        y1: nodes[i].y,
-        x2: nodes.last.x,
-        y2: nodes.last.y,
-        text: '1',
-        start: i,
-        end: nodes.length - 1,
-        radius: radius,
-      ));
-    }
-  }
-
   void editConnections() {
     for (int i = 0; i < edges.length; i++) {
       if (edges[i].start == elementIndex) {
@@ -265,18 +237,6 @@ class _HomeScreenState extends State<HomeScreen> {
           x2: nodes[elementIndex].x,
           y2: nodes[elementIndex].y,
         );
-      }
-    }
-  }
-
-  void deleteConnections(int index) {
-    for (int i = 0; i < edges.length; i++) {
-      if (edges[i].start == index || edges[i].end == index) {
-        edges.removeAt(i);
-        i--;
-      } else {
-        if (edges[i].start > index) edges[i] = edges[i].copyWith(start: edges[i].start - 1);
-        if (edges[i].end > index) edges[i] = edges[i].copyWith(end: edges[i].end - 1);
       }
     }
   }

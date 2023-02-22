@@ -18,7 +18,7 @@ class Edge extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final angle = math.atan2(posY2 - posY1, posX2 - posX1);
-    const arrowSize = 15;
+    const arrowSize = 20;
     const arrowAngle = 25 * math.pi / 180;
 
     final arrowPath = Path()
@@ -36,7 +36,8 @@ class Edge extends CustomPainter {
 
     final edgePath = Path()
       ..moveTo(posX1, posY1)
-      ..lineTo(posX2, posY2);
+      ..lineTo(posX2, posY2)
+      ..close();
 
     canvas.drawPath(edgePath, edge);
 
@@ -52,7 +53,7 @@ class Edge extends CustomPainter {
       textDirection: TextDirection.ltr,
     );
     textPainter.layout();
-    textPainter.paint(canvas, Offset((posX1 + posX2) / 2 - 15, (posY1 + posY2) / 2 - 15));
+    textPainter.paint(canvas, Offset((posX1 + posX2) / 2 - 20, (posY1 + posY2) / 2 - 20));
   }
 
   @override
