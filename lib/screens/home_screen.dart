@@ -19,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen> {
   NodeModel? targetNode;
   int elementIndex = -1;
   double radius = 30;
-  bool allowEditConnection = false;
   bool allowDrag = false;
   int state = 0;
   int currentSelectedIndex = -1;
@@ -32,235 +31,174 @@ class _HomeScreenState extends State<HomeScreen> {
         centerTitle: true,
         backgroundColor: Colors.indigo,
       ),
-      body: Stack(
-        children: [
-          ...edges,
-
-          ...nodes,
-          if (state == 1)
-            GestureDetector(
-              onTapDown: (position) {
-                setState(
-                  () {
-                    if (isInsideScreen(position.localPosition.dx, position.localPosition.dy)) {
-                      state = 2;
-                      nodes.add(NodeModel(
-                        x: position.localPosition.dx,
-                        y: position.localPosition.dy,
-                        color: Colors.indigo,
-                        radius: radius,
-                        text: '',
-                      ));
-                    }
-                  },
-                );
-              },
-            ),
-          if (state == 2)
-            CustomAlertDialogNodeName(
-                title: 'Añadir vértice',
-                content: 'Nombre del vértice:',
-                cancelAction: () {
-                  setState(() {
-                    state = 1;
-                    nodes.removeLast();
-                  });
-                },
-                confirmAction: (value) {
-                  setState(() {
-                    nodesNames.add(value);
-                    nodes.last = nodes.last.copyWith(text: value);
-                    state = 1;
-                  });
-                },
-                nodes: nodesNames),
-          if (state == 3)
-            GestureDetector(
-              onTapDown: (position) {
-                setState(() {
-                  for (int i = 0; i < nodes.length; i++) {
-                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-                      sourceNode = nodes[i];
-                      break;
-                    }
+      body: Stack(children: [
+        ...edges,
+        ...nodes,
+        if (state == 1)
+          GestureDetector(
+            onTapDown: (position) {
+              setState(
+                () {
+                  if (isInsideScreen(position.localPosition.dx, position.localPosition.dy)) {
+                    state = 2;
+                    nodes.add(NodeModel(
+                      x: position.localPosition.dx,
+                      y: position.localPosition.dy,
+                      color: Colors.indigo,
+                      radius: radius,
+                      text: '',
+                    ));
                   }
-                  state = 4;
-                });
-              },
-            ),
-          if (state == 4)
-            GestureDetector(
-              onTapDown: (position) {
-                setState(() {
-                  for (int i = 0; i < nodes.length; i++) {
-                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-                      targetNode = nodes[i];
-                      break;
-                    }
-                  }
-                  state = 5;
-                  edges.add(EdgeModel(
-                    x1: sourceNode!.x,
-                    y1: sourceNode!.y,
-                    x2: targetNode!.x,
-                    y2: targetNode!.y,
-                    text: '',
-                    radius: radius,
-                  ));
-                });
-              },
-            ),
-          if (state == 5)
-            CustomAlertDialogEdgeCost(
-              title: 'Añadir arista',
-              content: 'Costo de la arista:',
+                },
+              );
+            },
+          ),
+        if (state == 2)
+          CustomAlertDialogNodeName(
+              title: 'Añadir vértice',
+              content: 'Nombre del vértice:',
               cancelAction: () {
                 setState(() {
-                  state = 3;
-                  edges.removeLast();
-                  sourceNode = null;
-                  targetNode = null;
+                  state = 1;
+                  nodes.removeLast();
                 });
               },
               confirmAction: (value) {
                 setState(() {
-                  edgesConnections.add(EdgeConnection(
-                    source: sourceNode!.text,
-                    target: targetNode!.text,
-                    cost: int.parse(value),
-                  ));
-                  bool duplicate = false;
-                  for (int i = 0; i < edgesConnections.length - 1; i++) {
-                    if (edgesConnections[i].source == edgesConnections.last.source && edgesConnections[i].target == edgesConnections.last.target) {
-                      edgesConnections.removeLast();
-                      edges.removeLast();
-                      edges[i] = edges[i].copyWith(text: value.toString());
-                      duplicate = true;
-                      break;
-                    }
-                  }
-                  if (!duplicate) {
-                    edges.last = edges.last.copyWith(text: value);
-                  }
-                  sourceNode = null;
-                  targetNode = null;
-                  state = 3;
+                  nodesNames.add(value);
+                  nodes.last = nodes.last.copyWith(text: value);
+                  state = 1;
                 });
               },
-            ),
-          if (state == 6)
-            GestureDetector(
-              onTapDown: (position) {
-                setState(() {
-                  for (int i = 0; i < nodes.length; i++) {
-                    if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-                      nodes.removeAt(i);
-                      break;
-                    }
+              nodes: nodesNames),
+        if (state == 3)
+          GestureDetector(
+            onTapDown: (position) {
+              setState(() {
+                for (int i = 0; i < nodes.length; i++) {
+                  if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                    sourceNode = nodes[i];
+                    break;
                   }
-                  for (int i = 0; i < edges.length; i++) {
-                    if (edges[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-                      edges.removeAt(i);
-                      break;
-                    }
+                }
+                state = 4;
+              });
+            },
+          ),
+        if (state == 4)
+          GestureDetector(
+            onTapDown: (position) {
+              setState(() {
+                for (int i = 0; i < nodes.length; i++) {
+                  if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                    targetNode = nodes[i];
+                    break;
                   }
-                });
-              },
-            ),
-          // if (state == 3)
-          // if (state == 5)
-          //   GestureDetector(
-          //     onPanDown: (position) {
-          //       setState(() {
-          //         for (int i = 0; i < nodes.length; i++) {
-          //           if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-          //             elementIndex = i;
-          //             break;
-          //           }
-          //         }
-          //         for (int i = 0; i < edges.length; i++) {
-          //           if (edges[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-          //             elementIndex = i;
-          //             allowEditConnection = true;
-          //             break;
-          //           }
-          //         }
-          //       });
-          //     },
-          //   ),
-          // if (state == 4)
-          //   CustomAlertDialogNodeName(
-          //       title: 'Editar Nodo',
-          //       content: 'Nombre del Nodo',
-          //       cancelAction: () {
-          //         setState(() {
-          //           elementIndex = -1;
-          //           state = 3;
-          //         });
-          //       },
-          //       confirmAction: (value) {
-          //         setState(() {
-          //           nodes[elementIndex] = nodes[elementIndex].copyWith(text: value);
-          //           elementIndex = -1;
-          //           state = 3;
-          //         });
-          //       },
-          //       text: nodes[elementIndex].text),
-          // if (state == 4 && allowEditConnection)
-          //   CustomAlertDialogNodeName(
-          //       title: 'Editar Conexion',
-          //       content: 'Peso de la Conexion',
-          //       cancelAction: () {
-          //         setState(() {
-          //           elementIndex = -1;
-          //           allowEditConnection = false;
-          //           state = 3;
-          //         });
-          //       },
-          //       confirmAction: (value) {
-          //         setState(() {
-          //           edges[elementIndex] = edges[elementIndex].copyWith(text: value);
-          //           elementIndex = -1;
-          //           allowEditConnection = false;
-          //           state = 3;
-          //         });
-          //       },
-          //       text: edges[elementIndex].text),
-          // if (state == 5)
-          //   GestureDetector(
-          //     onPanDown: (position) {
-          //       setState(() {
-          //         for (int i = 0; i < nodes.length; i++) {
-          //           if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
-          //             elementIndex = i;
-          //             allowDrag = true;
-          //             break;
-          //           }
-          //         }
-          //       });
-          //     },
-          //     onPanUpdate: (position) {
-          //       setState(() {
-          //         if (allowDrag && isInsideScreen(position.localPosition.dx, position.localPosition.dy)) {
-          //           nodes[elementIndex] = nodes[elementIndex].copyWith(
-          //             x: position.localPosition.dx,
-          //             y: position.localPosition.dy,
-          //           );
-          //           editConnections();
-          //         }
-          //       });
-          //     },
-          //     onPanEnd: (position) {
-          //       customScaffoldMessenger(context: context, text: 'Nodo movido.');
-          //       setState(() {
-          //         allowDrag = false;
-          //         elementIndex = -1;
-          //         state = 5;
-          //       });
-          //     },
-          //   ),
-        ],
-      ),
+                }
+                state = 5;
+                edges.add(EdgeModel(
+                  x1: sourceNode!.x,
+                  y1: sourceNode!.y,
+                  x2: targetNode!.x,
+                  y2: targetNode!.y,
+                  text: '',
+                  radius: radius,
+                ));
+              });
+            },
+          ),
+        if (state == 5)
+          CustomAlertDialogEdgeCost(
+            title: 'Añadir arista',
+            content: 'Costo de la arista:',
+            cancelAction: () {
+              setState(() {
+                state = 3;
+                edges.removeLast();
+                sourceNode = null;
+                targetNode = null;
+              });
+            },
+            confirmAction: (value) {
+              setState(() {
+                edgesConnections.add(EdgeConnection(
+                  source: sourceNode!.text,
+                  target: targetNode!.text,
+                  cost: int.parse(value),
+                ));
+                bool duplicate = false;
+                for (int i = 0; i < edgesConnections.length - 1; i++) {
+                  if (edgesConnections[i].source == edgesConnections.last.source && edgesConnections[i].target == edgesConnections.last.target) {
+                    edgesConnections.removeLast();
+                    edges.removeLast();
+                    edges[i] = edges[i].copyWith(text: value.toString());
+                    duplicate = true;
+                    break;
+                  }
+                }
+                if (!duplicate) {
+                  edges.last = edges.last.copyWith(text: value);
+                }
+                sourceNode = null;
+                targetNode = null;
+                state = 3;
+              });
+            },
+          ),
+        if (state == 6)
+          GestureDetector(
+            onTapDown: (position) {
+              setState(() {
+                for (int i = 0; i < nodes.length; i++) {
+                  if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                    nodes.removeAt(i);
+                    nodesNames.removeAt(i);
+                    // deleteEdges(i);
+                    break;
+                  }
+                }
+                for (int i = 0; i < edges.length; i++) {
+                  if (edges[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                    edges.removeAt(i);
+                    edgesConnections.removeAt(i);
+                    break;
+                  }
+                }
+              });
+            },
+          ),
+        if (state == 7)
+          GestureDetector(
+            onPanDown: (position) {
+              setState(() {
+                for (int i = 0; i < nodes.length; i++) {
+                  if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                    elementIndex = i;
+                    allowDrag = true;
+                    break;
+                  }
+                }
+              });
+            },
+            onPanUpdate: (position) {
+              setState(() {
+                if (allowDrag && isInsideScreen(position.localPosition.dx, position.localPosition.dy)) {
+                  nodes[elementIndex] = nodes[elementIndex].copyWith(
+                    x: position.localPosition.dx,
+                    y: position.localPosition.dy,
+                  );
+                  updateConnections();
+                }
+              });
+            },
+            onPanEnd: (position) {
+              setState(() {
+                allowDrag = false;
+                elementIndex = -1;
+              });
+            },
+          ),
+      ]),
       bottomNavigationBar: CustomBottomNavigationBar(
         onTap: (value) {
           switch (value) {
@@ -285,18 +223,47 @@ class _HomeScreenState extends State<HomeScreen> {
               currentSelectedIndex = 2;
               break;
             case 3:
-              customScaffoldMessenger(
-                  context: context, text: nodes.isNotEmpty ? 'Presione en un nodo para eliminarlo.' : 'Primero debe agregar nodos.');
               setState(() {
-                state = nodes.isNotEmpty ? 6 : 0;
+                state = 7;
               });
               currentSelectedIndex = 3;
               break;
+            case 4:
+              setState(() {
+                state = 8;
+              });
+              currentSelectedIndex = 4;
+            // mostrar matriz de adyacencia
           }
         },
         currentIndex: currentSelectedIndex,
       ),
     );
+  }
+
+  void updateConnections() {
+    String nodeName = nodesNames[elementIndex];
+    List<int> indexes = [];
+    for (int i = 0; i < edgesConnections.length; i++) {
+      if (edgesConnections[i].source == nodeName || edgesConnections[i].target == nodeName) {
+        indexes.add(i);
+      }
+    }
+    for (int i = 0; i < edges.length; i++) {
+      if (indexes.contains(i)) {
+        if (edgesConnections[i].source == nodeName) {
+          edges[i] = edges[i].copyWith(
+            x1: nodes[elementIndex].x,
+            y1: nodes[elementIndex].y,
+          );
+        } else {
+          edges[i] = edges[i].copyWith(
+            x2: nodes[elementIndex].x,
+            y2: nodes[elementIndex].y,
+          );
+        }
+      }
+    }
   }
 
   bool isInsideScreen(double x, double y) {

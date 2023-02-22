@@ -56,7 +56,6 @@ class EdgeModel extends StatelessWidget {
   }
 
   bool isInside(double dx, double dy) {
-    // check if the point is the node
     if (dx >= x2 - radius - 20 && dx <= x2 + radius + 20 && dy >= y2 - radius - 20 && dy <= y2 + radius + 20) {
       return true;
     }
