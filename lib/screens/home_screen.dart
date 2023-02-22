@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool allowDrag = false;
   int state = 0;
   int currentSelectedIndex = -1;
+  List<List<int>> matrix = [];
 
   @override
   Widget build(BuildContext context) {
@@ -199,6 +200,17 @@ class _HomeScreenState extends State<HomeScreen> {
               });
             },
           ),
+        if (state == 8)
+          CustomAlertDialogAdjacencyMatrix(
+            title: 'Matriz de Adyacencia',
+            matrix: matrix,
+            labels: nodesNames,
+            cancelAction: () {
+              setState(() {
+                state = 0;
+              });
+            },
+          ),
       ]),
       bottomNavigationBar: CustomBottomNavigationBar(
         onTap: (value) {
@@ -231,15 +243,14 @@ class _HomeScreenState extends State<HomeScreen> {
               break;
             case 4:
               setState(() {
-                state = 0;
-                // List<List<String>> matrix = adjacencyMatrix(nodesNames, edgesConnections);\
-                adjacencyMatrix(nodesNames, edgesConnections);
-                // for (int i = 0; i < matrix.length; i++) {
-                //   // print(matrix[i]);
-                // }
+                if (nodesNames.isEmpty) {
+                  customScaffoldMessenger(context: context, text: 'No hay nodos para generar la matriz de adyacencia.');
+                } else {
+                  state = 8;
+                  matrix = adjacencyMatrix(nodesNames, edgesConnections);
+                }
               });
               currentSelectedIndex = 4;
-            // mostrar matriz de adyacencia
           }
         },
         currentIndex: currentSelectedIndex,

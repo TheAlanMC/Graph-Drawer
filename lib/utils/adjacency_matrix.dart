@@ -1,6 +1,6 @@
 import 'package:graph_drawer/utils/utils.dart';
 
-void adjacencyMatrix(List<String> nodesNames, List<EdgeConnection> edgesConnections) {
+List<List<int>> adjacencyMatrix(List<String> nodesNames, List<EdgeConnection> edgesConnections) {
   List<List<int>> adjacencyMatrix = List.generate(nodesNames.length + 1, (index) => List.filled(nodesNames.length + 1, 0));
   Map<String, int> nodeIndices = {};
   List<int> rowSums = List.filled(nodesNames.length, 0);
@@ -23,7 +23,8 @@ void adjacencyMatrix(List<String> nodesNames, List<EdgeConnection> edgesConnecti
     adjacencyMatrix[nodesNames.length][i] = colSums[i];
   }
 
-  for (int i = 0; i < adjacencyMatrix.length; i++) {
-    print(adjacencyMatrix[i]);
-  }
+  // for (int i = 0; i < adjacencyMatrix.length; i++) {
+  //   print(adjacencyMatrix[i]);
+  // }
+  return adjacencyMatrix;
 }
