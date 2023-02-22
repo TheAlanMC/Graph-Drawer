@@ -153,7 +153,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
                     nodes.removeAt(i);
                     nodesNames.removeAt(i);
-                    // deleteEdges(i);
+                    // TODO: IMPLEMENT DELETE EDGES
+                    //deleteEdges(i);
                     break;
                   }
                 }
@@ -230,7 +231,12 @@ class _HomeScreenState extends State<HomeScreen> {
               break;
             case 4:
               setState(() {
-                state = 8;
+                state = 0;
+                // List<List<String>> matrix = adjacencyMatrix(nodesNames, edgesConnections);\
+                adjacencyMatrix(nodesNames, edgesConnections);
+                // for (int i = 0; i < matrix.length; i++) {
+                //   // print(matrix[i]);
+                // }
               });
               currentSelectedIndex = 4;
             // mostrar matriz de adyacencia
