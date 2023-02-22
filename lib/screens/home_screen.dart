@@ -152,10 +152,9 @@ class _HomeScreenState extends State<HomeScreen> {
               setState(() {
                 for (int i = 0; i < nodes.length; i++) {
                   if (nodes[i].isInside(position.localPosition.dx, position.localPosition.dy)) {
+                    deleteEdges(nodes[i].text);
                     nodes.removeAt(i);
                     nodesNames.removeAt(i);
-                    // TODO: IMPLEMENT DELETE EDGES
-                    //deleteEdges(i);
                     break;
                   }
                 }
@@ -281,6 +280,25 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
+  }
+
+  void deleteEdges(String nodeName) {
+    List<int> indexes = [];
+    for (int i = 0; i < edgesConnections.length; i++) {
+      if (edgesConnections[i].source == nodeName || edgesConnections[i].target == nodeName) {
+        indexes.add(i);
+      }
+    }
+    List<EdgeConnection> edgesConnectionsCopy = [];
+    List<EdgeModel> edgesCopy = [];
+    for (int i = 0; i < edgesConnections.length; i++) {
+      if (!indexes.contains(i)) {
+        edgesConnectionsCopy.add(edgesConnections[i]);
+        edgesCopy.add(edges[i]);
+      }
+    }
+    edgesConnections = edgesConnectionsCopy;
+    edges = edgesCopy;
   }
 
   bool isInsideScreen(double x, double y) {
