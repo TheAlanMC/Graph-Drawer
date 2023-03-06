@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graph_drawer/widgets/widgets.dart';
 import 'package:graph_drawer/models/models.dart';
 import 'package:graph_drawer/utils/utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -212,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
       ]),
       bottomNavigationBar: CustomBottomNavigationBar(
-        onTap: (value) {
+        onTap: (value) async {
           switch (value) {
             case 0:
               setState(() {
@@ -250,6 +251,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               });
               currentSelectedIndex = 4;
+              break;
+            case 5:
+              setState(() {
+                state = 0;
+                nodes.clear();
+                nodesNames.clear();
+                edges.clear();
+                edgesConnections.clear();
+                matrix.clear();
+              });
+              currentSelectedIndex = 5;
+              break;
+            case 6:
+              Uri url = Uri.parse('https://drive.google.com/file/d/1-4aG8LCPwppB4kBSzCXupJsw45ba1E3Z/view?usp=share_link');
+              await launchUrl(url);
+              currentSelectedIndex = 6;
+              break;
           }
         },
         currentIndex: currentSelectedIndex,

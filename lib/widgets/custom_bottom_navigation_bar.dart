@@ -22,6 +22,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
           BottomNavigationBarItem(icon: customIcon(2, 'assets/delete.png'), label: 'Eliminar'),
           BottomNavigationBarItem(icon: customIcon(3, 'assets/hand.png'), label: 'Mover vertice'),
           BottomNavigationBarItem(icon: customIcon(4, 'assets/matrix.png'), label: 'Generar matriz de adyacencia'),
+          BottomNavigationBarItem(icon: customIcon(5, 'assets/clean.png'), label: 'Limpiar Pantalla'),
+          BottomNavigationBarItem(icon: customIcon(6, 'assets/help.png'), label: 'Ayuda'),
         ],
         onTap: ((value) => onTap(value)));
   }
